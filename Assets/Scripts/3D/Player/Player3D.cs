@@ -9,20 +9,20 @@ public class Player3D : MonoBehaviour
     {
         get
         {
-            if (instance == null)
-                instance = FindObjectOfType<Player3D>();
-
             return instance;
         }
     }
 
-    private CharacterController controller;
+    public CharacterController controller;
     private Vector3 playerVelocity;
     private bool grounded;
     [SerializeField] private float playerSpeed = 2.0f;
     [SerializeField] private float jumpHeight = 1.0f;
     [SerializeField] private float gravityValue = -9.81f;
-
+    private void Awake()
+    {
+        instance = this;
+    }
     private void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -30,12 +30,11 @@ public class Player3D : MonoBehaviour
 
     void Update()
     {
-        grounded = controller.isGrounded;
-        if (grounded && playerVelocity.y < 0)
+        /*if (GroundCheck3D.Instance.onGround && playerVelocity.y < 0)
         {
             playerVelocity.y = 0f;
         }
-
+        */
         float horizInput = Input.GetAxisRaw("Horizontal");
         float vertInput = Input.GetAxisRaw("Vertical");
 
@@ -46,15 +45,16 @@ public class Player3D : MonoBehaviour
         Vector3 movement = Vector3.Normalize(forwardMovement + rightMovement);
 
         controller.Move(movement * Time.deltaTime * playerSpeed);
-
+        /*
         // Changes the height position of the player..
-        if (Input.GetButtonDown("Jump") && grounded)
+        if (Input.GetButtonDown("Jump") && GroundCheck3D.Instance.onGround)
         {
             playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
         }
 
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
+        */
     }
 
     //[Header("Movement")]

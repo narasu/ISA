@@ -6,7 +6,6 @@ public class PlayerLook : MonoBehaviour
 {
 #pragma warning disable 0649
     [SerializeField] private Transform playerBody;
-    [SerializeField] private string mouseXInputName, mouseYInputName;
 
     [SerializeField] private float mouseSensitivity = 150f;
 #pragma warning restore 0649
@@ -32,8 +31,8 @@ public class PlayerLook : MonoBehaviour
     private void CameraRotation()
     {
         //set mouse movement values
-        float mouseX = Input.GetAxis(mouseXInputName) * mouseSensitivity;
-        float mouseY = Input.GetAxis(mouseYInputName) * mouseSensitivity;
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
         xAxisClamp += mouseY;
 
