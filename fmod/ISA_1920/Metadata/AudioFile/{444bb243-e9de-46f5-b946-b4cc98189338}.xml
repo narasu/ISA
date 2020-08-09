@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.00.00">
+	<object class="AudioFile" id="{444bb243-e9de-46f5-b946-b4cc98189338}">
+		<property name="assetPath">
+			<value>isa_shoot1.mp3</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.18285714285714286</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{032329ca-4ff9-464c-8786-500b04b7537e}</destination>
+		</relationship>
+	</object>
+</objects>

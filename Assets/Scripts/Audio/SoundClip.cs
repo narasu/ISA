@@ -22,6 +22,14 @@ public class SoundClip : MonoBehaviour
 
     private Rigidbody rigidBody;
 
+    public void Initialize(bool playOnAwake = true, bool repeat = false, float repeatInterval = 0.1f, bool allowFadeOut = false)
+    {
+        this.playOnAwake = playOnAwake;
+        this.repeat = repeat;
+        this.repeatInterval = repeatInterval;
+        this.allowFadeOut = allowFadeOut;
+    }
+
     private void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
@@ -43,7 +51,6 @@ public class SoundClip : MonoBehaviour
             coroutineRunning = true;
             PLAYBACK_STATE isPlaying;
             sound.getPlaybackState(out isPlaying);
-
 
             if (isPlaying == PLAYBACK_STATE.PLAYING)
             {

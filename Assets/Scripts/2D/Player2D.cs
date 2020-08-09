@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Player2D : MonoBehaviour
 {
@@ -13,63 +15,82 @@ public class Player2D : MonoBehaviour
         }
     }
 
-    public GroundCheck2D groundCheck;
-    public float jumpForce = 5.0f;
-    public float walkSpeed = 2.0f;
-    private Rigidbody2D rigidBody;
-    private BoxCollider2D col;
     private SpriteRenderer sr;
+    private Rigidbody2D rb;
+    
+    public string inputAxis = "Vertical";
+    public float moveSpeed = 5.0f;
+    public float fireRate = 0.5f;
+    private bool firing;
+    public GameObject bullet;
+    public Transform firePoint;
+
+    public int health = 5;
+
+    
 
     private void Awake()
     {
         instance = this;
-        rigidBody = GetComponent<Rigidbody2D>();
-        sr= GetComponent<SpriteRenderer>();
-        col = GetComponent<BoxCollider2D>();
+        sr = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+
+        
     }
 
     private void Update()
     {
-        if (Input.GetButtonDown("Jump") && groundCheck.onGround)
+        float movement = Input.GetAxisRaw(inputAxis) * moveSpeed;
+        
+
+        if (inputAxis=="Vertical")
         {
-            rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            rb.velocity = new Vector2(0, movement);
+            if (movement < 0)
+                transform.localScale = new Vector3(1, -1);
+            if (movement > 0)
+                transform.localScale = Vector3.one;
+        }
+        if (inputAxis == "Horizontal")
+        {
+            rb.velocity = new Vector2(movement,0);
+            if (movement < 0)
+                transform.rotation = Quaternion.Euler(0, 0, 90);
+            if (movement > 0)
+                transform.rotation = Quaternion.Euler(0, 0, -90);
         }
 
-        Move();
+        if (Input.GetKeyDown(KeyCode.Space) && !firing && inputAxis == "Vertical")
+        {
+            GameObject b = Instantiate(bullet);
+            b.transform.position = firePoint.position;
+            b.GetComponent<Bullet>().speed *= transform.localScale.y;
+            
+            firing = true;
+            StartCoroutine(HandleFireRate());
+        }
+
+        if (health <= 0)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        UIManager.Instance.healthText.text = "Health: " + health;
+        //transform.Translate(Vector3.up * movement * Time.deltaTime);
     }
 
-    private void Move()
+    public void SwitchAxis()
     {
-        float movement = Input.GetAxisRaw("Horizontal") * walkSpeed;
-        /*
-        if (movement == 0)
-        {
-            rigidBody.velocity = new Vector2(0, rigidBody.velocity.y);
-            return;
-        }
-        */
-        Vector2 startPos = new Vector2(transform.position.x, transform.position.y);
-        Vector2 direction = new Vector2(Mathf.Sign(movement), 0);
-        float hitLength = sr.bounds.extents.x + 0.01f;
-        //Debug.Log(hitLength);
+        inputAxis = "Horizontal";
+        rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+    }
 
-        LayerMask mask = LayerMask.GetMask("Ground");
-        RaycastHit2D hit = Physics2D.Raycast(startPos, direction, hitLength, mask);
+    private IEnumerator HandleFireRate()
+    {
+        yield return new WaitForSeconds(fireRate);
+        firing = false;
+    }
 
-        //Vector2 size = new Vector2(0.1f, sr.bounds.size.y - 0.01f);
-        //RaycastHit2D hit = Physics2D.BoxCast(transform.position, size, 0, direction, hitLength, mask);
-        
-
-
-
-        //RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(transform.position.x + movement, transform.position.y), movement + (sr.bounds.size.x / 2 * Mathf.Sign(movement)));
-        
-        if (hit)
-        {
-            //Debug.Log("Hit");
-            movement = 0;
-        }
-
-        rigidBody.velocity = new Vector2(movement, rigidBody.velocity.y);
+    public void TakeDamage()
+    {
+        health--;
     }
 }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using FMOD.Studio;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager3D : MonoBehaviour
 {
-    private static AudioManager instance;
-    public static AudioManager Instance
+    private static AudioManager3D instance;
+    public static AudioManager3D Instance
     {
         get
         {

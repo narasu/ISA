@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - Checkpoint
+  - Bullet Destroy
   layers:
   - Default
   - TransparentFX
@@ -17,8 +18,8 @@ TagManager:
   - 
   - Player
   - Ground
-  - 
-  - 
+  - camera
+  - bullet
   - 
   - 
   - 
